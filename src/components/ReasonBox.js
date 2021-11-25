@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import {
   DialogActions,
   DialogContent,
@@ -9,40 +9,12 @@ import {
   TextField,
 } from "@material-ui/core";
 
-const ReasonBox = (props) => {
+const ReasonBox = ({ props, openHandle }) => {
   const [state, setState] = useState({
     pauseTime: 0,
     reason: "",
     startTime: 0,
   });
-
-  // const handleSubmit = async () => {
-  //   const pause = {
-  //     time: new Date(),
-  //     reason: state.reason,
-  //   };
-  //   //write to db
-
-  //   const res = await fetch("http://localhost:5000/pause", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-type": "application/json",
-  //     },
-  //     body: JSON.stringify(pause),
-  //   });
-
-  //   console.log("fetch response", res);
-  //   setState((prevState) => {
-  //     const reason = "RELAX";
-  //     return {
-  //       ...prevState,
-  //       running: false,
-  //       open: false,
-  //       pauseTime: 0,
-  //       reason: "",
-  //     };
-  //   });
-  // };
 
   const handleSubmit = async () => {
     const pauseTime = new Date();
@@ -51,10 +23,9 @@ const ReasonBox = (props) => {
       time: pauseTime,
       reason: pauseReason,
     };
+    console.log("reason", state.reason);
 
-    //write to the db
-
-    const res = await fetch("http://localhost:5000/pause", {
+    const res = await fetch(`http://localhost:5000/pause`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -63,22 +34,18 @@ const ReasonBox = (props) => {
     });
 
     console.log("fetch response", res);
-
-    // //update state
-    // setState((prevState) => {
-    //   return {
-    //     ...prevState,
-    //     running: false,
-    //     open: false,
-    //     pauseTime: 0,
-    //     reason: "",
-    //   };
-    // });
+    openHandle(false);
   };
 
   return (
     <div>
-      <Dialog open={true} onClose={handleSubmit} fullWidth>
+      <Dialog
+        open={props.open}
+        onClose={() => {
+          handleSubmit(false);
+        }}
+        fullWidth
+      >
         <DialogTitle>Reason</DialogTitle>
         <DialogContent>
           <DialogContentText>Why do you want to pause?</DialogContentText>
@@ -89,6 +56,7 @@ const ReasonBox = (props) => {
           style={{ margin: "20px" }}
           value={props.reason}
           onChange={(e) => {
+            console.log("reason", state.reason);
             setState((prevState) => {
               return { ...prevState, reason: e.target.value };
             });

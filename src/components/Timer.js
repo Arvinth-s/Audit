@@ -1,13 +1,4 @@
 import React, { useState } from "react";
-import {
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  DialogContentText,
-  Dialog,
-  Button,
-  TextField,
-} from "@material-ui/core";
 import ReasonBox from "./ReasonBox";
 
 const Timer = () => {
@@ -16,6 +7,7 @@ const Timer = () => {
     time: {},
     seconds: 3600,
     id: -1,
+    open: false,
   });
 
   const countDown = () => {
@@ -40,33 +32,11 @@ const Timer = () => {
     };
   };
 
-  // const handleClose = () => {
-  //   setState((prevState) => {
-  //     const reason = "RELAX";
-  //     return {
-  //       ...prevState,
-  //       running: false,
-  //       open: false,
-  //       pauseTimes: [...state.pauseTimes, new Date()],
-  //       pauseReason: [...state.pauseReason, reason],
-  //       reason: "",
-  //     };
-  //   });
-  // };
-
-  // const handleSubmit = () => {
-  //   setState((prevState) => {
-  //     const reason = prevState.reason;
-  //     return {
-  //       ...prevState,
-  //       running: false,
-  //       open: false,
-  //       pauseTimes: [...state.pauseTimes, new Date()],
-  //       pauseReason: [...state.pauseReason, reason],
-  //       reason: "",
-  //     };
-  //   });
-  // };
+  const openHandle = (value) => {
+    setState((prevState) => {
+      return { ...prevState, open: value };
+    });
+  };
 
   const toggleTimer = () => {
     if (!state.running) {
@@ -83,6 +53,7 @@ const Timer = () => {
         return {
           ...prevState,
           running: false,
+          open: true,
         };
       });
       clearInterval(state.id);
@@ -92,7 +63,7 @@ const Timer = () => {
 
   return (
     <div className="container">
-      <ReasonBox props={{}} />
+      <ReasonBox props={{ open: state.open }} openHandle={openHandle} />
       <div className="timer-glow">
         <div className="timer">
           <h3>{state.seconds}</h3>

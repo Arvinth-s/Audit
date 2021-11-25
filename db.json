@@ -1,7 +1,15 @@
 {
   "startTime": [],
-  "pause": {
-    "time": [],
-    "reason": []
-  }
+  "pause": [
+    {
+      "time": "2021-11-25T05:37:42.574Z",
+      "reason": "wwww",
+      "id": 1
+    },
+    {
+      "time": "2021-11-25T05:37:55.361Z",
+      "reason": "it works!",
+      "id": 2
+    }
+  ]
 }
