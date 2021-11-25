@@ -38,8 +38,18 @@ const Timer = () => {
     });
   };
 
-  const toggleTimer = () => {
+  const toggleTimer = async () => {
     if (!state.running) {
+      await fetch(`http://localhost:5000/startTime`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({ time: new Date() }),
+      }).then((res) => {
+        console.log("response: ", res);
+      });
+
       let id = setInterval(countDown, state.seconds);
       setState((prevState) => {
         return {
@@ -58,12 +68,14 @@ const Timer = () => {
       });
       clearInterval(state.id);
     }
-    console.log(state);
   };
 
   return (
     <div className="container">
-      <ReasonBox props={{ open: state.open }} openHandle={openHandle} />
+      <ReasonBox
+        props={{ open: state.open, time: new Date() }}
+        openHandle={openHandle}
+      />
       <div className="timer-glow">
         <div className="timer">
           <h3>{state.seconds}</h3>

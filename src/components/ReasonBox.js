@@ -11,20 +11,16 @@ import {
 
 const ReasonBox = ({ props, openHandle }) => {
   const [state, setState] = useState({
-    pauseTime: 0,
     reason: "",
-    startTime: 0,
   });
 
   const handleSubmit = async () => {
-    const pauseTime = new Date();
+    const pauseTime = props.time;
     const pauseReason = state.reason;
     const pause = {
       time: pauseTime,
       reason: pauseReason,
     };
-    console.log("reason", state.reason);
-
     const res = await fetch(`http://localhost:5000/pause`, {
       method: "POST",
       headers: {
@@ -56,7 +52,6 @@ const ReasonBox = ({ props, openHandle }) => {
           style={{ margin: "20px" }}
           value={props.reason}
           onChange={(e) => {
-            console.log("reason", state.reason);
             setState((prevState) => {
               return { ...prevState, reason: e.target.value };
             });

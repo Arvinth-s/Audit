@@ -1,14 +1,23 @@
 {
-  "startTime": [],
-  "pause": [
+  "startTime": [
     {
-      "time": "2021-11-25T05:37:42.574Z",
-      "reason": "wwww",
+      "time": "2021-11-25T06:07:59.514Z",
       "id": 1
     },
     {
-      "time": "2021-11-25T05:37:55.361Z",
-      "reason": "it works!",
+      "time": "2021-11-25T06:08:16.090Z",
+      "id": 2
+    }
+  ],
+  "pause": [
+    {
+      "time": "2021-11-25T06:08:03.263Z",
+      "reason": "trail-run 1",
+      "id": 1
+    },
+    {
+      "time": "2021-11-25T06:08:18.857Z",
+      "reason": "trail-run 2",
       "id": 2
     }
   ]

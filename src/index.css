@@ -7,6 +7,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--primary-color);
   color: var(--primary-color);
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+body::-webkit-scrollbar {
+  display: none;
 }
 
 :root {
@@ -21,7 +26,7 @@ body {
 
 .container {
   display: flex;
-  width: 100vw;
+  width: 100%;
   height: calc(100vh - var(--header-height));
   margin: 0em;
   border-style: 0;
@@ -85,11 +90,12 @@ body {
   align-items: flex-start;
   font-size: 30px;
   font-weight: 700;
-  width: 300px;
+  width: 100%;
   border-radius: 0px 0px 10px 10px;
   justify-content: center;
   display: inline-flex;
   text-shadow: 0px 0px 8px var(--highlight-color);
+
   padding: 5px 10px;
 }
 
@@ -101,9 +107,10 @@ body {
   align-items: center;
   justify-content: flex-end;
   border-radius: 0px;
+  border-bottom: 30px solid var(--primary-color);
   border-left: 20px solid var(--secondary-color);
-  border-right: 25px solid var(--secondary-color);
   margin-bottom: calc(var(--header-height) / 2 - 5px);
+  box-shadow: 0px 0px 0px 0px var(--highlight-color);
 }
 
 #header-item1 {
@@ -114,9 +121,10 @@ body {
   align-items: center;
   justify-content: flex-start;
   border-radius: 0px;
-  border-left: 20px solid var(--secondary-color);
-  border-right: 25px solid var(--secondary-color);
+  border-bottom: 30px solid var(--primary-color);
+  border-right: 20px solid var(--secondary-color);
   margin-bottom: calc(var(--header-height) / 2 - 5px);
+  box-shadow: 0px 0px 0px 0px var(--highlight-color);
 }
 
 code {
