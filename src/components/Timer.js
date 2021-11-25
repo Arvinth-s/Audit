@@ -6,7 +6,9 @@ import {
   DialogContentText,
   Dialog,
   Button,
+  TextField,
 } from "@material-ui/core";
+import ReasonBox from "./ReasonBox";
 
 const Timer = () => {
   const [state, setState] = useState({
@@ -14,7 +16,6 @@ const Timer = () => {
     time: {},
     seconds: 3600,
     id: -1,
-    open: false,
   });
 
   const countDown = () => {
@@ -39,47 +40,67 @@ const Timer = () => {
     };
   };
 
-  const handleClose = () => {
-    setState((prevState) => {
-      return { ...prevState, open: false };
-    });
-  };
+  // const handleClose = () => {
+  //   setState((prevState) => {
+  //     const reason = "RELAX";
+  //     return {
+  //       ...prevState,
+  //       running: false,
+  //       open: false,
+  //       pauseTimes: [...state.pauseTimes, new Date()],
+  //       pauseReason: [...state.pauseReason, reason],
+  //       reason: "",
+  //     };
+  //   });
+  // };
 
-  const startTimer = () => {
+  // const handleSubmit = () => {
+  //   setState((prevState) => {
+  //     const reason = prevState.reason;
+  //     return {
+  //       ...prevState,
+  //       running: false,
+  //       open: false,
+  //       pauseTimes: [...state.pauseTimes, new Date()],
+  //       pauseReason: [...state.pauseReason, reason],
+  //       reason: "",
+  //     };
+  //   });
+  // };
+
+  const toggleTimer = () => {
     if (!state.running) {
       let id = setInterval(countDown, state.seconds);
       setState((prevState) => {
-        return { ...prevState, running: true, id: id };
+        return {
+          ...prevState,
+          running: true,
+          id: id,
+        };
       });
     } else {
       setState((prevState) => {
-        return { ...prevState, running: false, open: true };
+        return {
+          ...prevState,
+          running: false,
+        };
       });
       clearInterval(state.id);
     }
+    console.log(state);
   };
 
   return (
     <div className="container">
+      <ReasonBox props={{}} />
       <div className="timer-glow">
         <div className="timer">
           <h3>{state.seconds}</h3>
-          <button className="btn" onClick={startTimer}>
+          <button className="btn" onClick={toggleTimer}>
             {!state.running ? "START" : "PAUSE"}
           </button>
         </div>
       </div>
-      <Dialog open={state.open} onClose={handleClose}>
-        <DialogTitle>Reason</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Why do you want to pause?</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
     </div>
   );
 };
