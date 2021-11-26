@@ -6,11 +6,11 @@ const Header = () => {
     <div>
       <header className="header">
         <div id="header-item1" className="header-item">
-          <h5>Audit</h5>
+          <h5>SA</h5>
         </div>
 
         <div className="header-item">
-          <h3>TIMER</h3>
+          <h3>AUDIT</h3>
         </div>
 
         <div id="header-item2" className="header-item">

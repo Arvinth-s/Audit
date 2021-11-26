@@ -165,7 +165,7 @@ const Stats = () => {
             labels: labels,
             datasets: [
               {
-                label: "Hours in seconds",
+                label: "Time in seconds",
                 data: data,
                 backgroundColor: backgroundColor[0],
               },

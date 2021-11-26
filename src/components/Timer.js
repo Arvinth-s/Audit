@@ -75,11 +75,11 @@ const Timer = () => {
       />
       <div className="timer-glow">
         <div className="timer">
-          <h3>
+          <h2>
             {state.time.h}
             {"h"} {state.time.m}
             {"m"} {state.time.s} {"s"}
-          </h3>
+          </h2>
           <button className="btn" onClick={toggleTimer}>
             {!state.running ? "START" : "PAUSE"}
           </button>

@@ -2,6 +2,7 @@ import "./App.css";
 import Timer from "./components/Timer";
 import Header from "./components/Header";
 import Stats from "./components/Stats";
+import Tasks from "./components/Tasks";
 
 function App() {
   return (
@@ -10,7 +11,9 @@ function App() {
       <div className="page">
         <Stats />
         <Timer />
-        {/* <Stats /> */}
+      </div>
+      <div className="page">
+        <Tasks />
       </div>
     </div>
   );

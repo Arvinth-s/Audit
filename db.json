@@ -42,5 +42,19 @@
       "reason": "eve-2",
       "id": 7
     }
+  ],
+  "tasks": [
+    {
+      "title": "FOC assignment-2",
+      "description": "Complete MATLAB assignment",
+      "deadline": "27-11-2021 20:05:29",
+      "id": 1
+    },
+    {
+      "title": "FOC assignment-3",
+      "description": "Complete MATLAB assignment",
+      "deadline": "28-11-2021 00:05:29",
+      "id": 1
+    }
   ]
 }
