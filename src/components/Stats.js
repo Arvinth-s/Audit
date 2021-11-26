@@ -9,6 +9,9 @@ import {
   Title,
   registerables,
 } from "chart.js";
+
+import "@testing-library/react";
+
 Chart.register(Tooltip, CategoryScale, LinearScale, Title);
 Chart.register(...registerables);
 
@@ -18,64 +21,33 @@ const Stats = () => {
     startResponse: [],
     intervals: [],
     average: 0,
-    metadata: {
+    chartdata: {
       type: "bar",
       data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+        labels: ["1", "2", "3", "4", "5"],
         datasets: [
           {
-            label: "# of Votes",
-            data: [12, 19, 3, 5, 2, 3],
+            label: "Time in seconds",
+            data: [65, 59, 80, 81, 56],
             backgroundColor: [
-              "rgba(255, 99, 132, 0.2)",
-              "rgba(54, 162, 235, 0.2)",
-              "rgba(255, 206, 86, 0.2)",
-              "rgba(75, 192, 192, 0.2)",
-              "rgba(153, 102, 255, 0.2)",
-              "rgba(255, 159, 64, 0.2)",
+              "#50AF95",
+              "#f3ba2f",
+              "#50AF95",
+              "#f3ba2f",
+              "#50AF95",
             ],
-            borderColor: [
-              "rgba(255, 99, 132, 1)",
-              "rgba(54, 162, 235, 1)",
-              "rgba(255, 206, 86, 1)",
-              "rgba(75, 192, 192, 1)",
-              "rgba(153, 102, 255, 1)",
-              "rgba(255, 159, 64, 1)",
-            ],
-            borderWidth: 1,
           },
         ],
       },
       options: {
-        scales: {
-          x: {
-            type: "category",
+        plugins: {
+          title: {
             display: true,
-            scaleLabel: {
-              display: false,
-            },
-            offset: true,
-            autoSkip: false,
-            ticks: {
-              display: true,
-              font: {
-                size: 16,
-              },
-            },
-            gridLines: {
-              display: false,
-            },
+            text: "Time spent [Hour]",
           },
-          y: {
-            type: "category",
-            offset: true,
-            autoSkip: false,
-            ticks: {
-              display: true,
-            },
-            gridLines: {
-              display: false,
-            },
+          legend: {
+            display: true,
+            position: "bottom",
           },
         },
       },
@@ -120,7 +92,7 @@ const Stats = () => {
   const dayTimeAverage = async (intervals) => {
     const targetIntervals = [];
     var i;
-    for (i = 0; i < 10; i++) {
+    for (i = 1; i < 10; i++) {
       targetIntervals.push("0" + i + ":00:00");
     }
     for (i = 10; i < 24; i++) {
@@ -134,28 +106,74 @@ const Stats = () => {
       );
     });
 
-    console.log("testInterval", testInterval);
-    plotGraph({ labels: targetIntervals, data: [1] * 24 });
+    var testIntervals = [];
+    for (i = 0; i < 23; i++) {
+      let temp_intervals = intervals.filter((value) => {
+        return (
+          moment(value.startTime, "DD-MM-YYYY HH:mm:ss").hour() <
+            moment(targetIntervals[i + 1], "HH:mm:ss").hour() &&
+          moment(value.startTime, "DD-MM-YYYY HH:mm:ss").hour() >=
+            moment(targetIntervals[i], "HH:mm:ss").hour()
+        );
+      });
+      let temp_sum = 0;
+      temp_intervals.map((interval) => {
+        var a = Math.min(
+          60 *
+            60 *
+            (moment(interval.startTime, "DD-MM-YYYY HH:mm:ss").hour() + 1),
+          60 * 60 * moment(interval.pauseTime, "DD-MM-YYYY HH:mm:ss").hour() +
+            60 * moment(interval.pauseTime, "DD-MM-YYYY HH:mm:ss").minute() +
+            moment(interval.pauseTime, "DD-MM-YYYY HH:mm:ss").seconds()
+        );
+        var b =
+          60 * 60 * moment(interval.startTime, "DD-MM-YYYY HH:mm:ss").hour() +
+          60 * moment(interval.startTime, "DD-MM-YYYY HH:mm:ss").minute() +
+          moment(interval.startTime, "DD-MM-YYYY HH:mm:ss").seconds();
+        var ts = a - b;
+        temp_sum += ts;
+
+        console.log("moments", a, b, "tempsum", temp_sum, "ts", ts, i);
+      });
+      testIntervals.push(temp_sum);
+    }
+
+    console.log("testIntervals", testIntervals);
+    plotGraph({
+      labels: targetIntervals,
+      data: testIntervals,
+    });
   };
 
   const plotGraph = ({ labels, data }) => {
-    const graphData = {
-      labels: labels,
-      datasets: [
-        {
-          label: "Effective Hours",
-          backgroundColor: "rgba(0, 0, 0, 1)",
-          data: data,
+    console.log("labels", labels, "data", data);
+    const colors = ["#50AF95", "#f3ba2f"];
+    const backgroundColor = [
+      labels.map((label, idx) => {
+        return colors[idx % 2];
+      }),
+    ];
+
+    console.log("bgcolor", backgroundColor);
+    setState((prevState) => {
+      return {
+        ...prevState,
+        chartdata: {
+          ...prevState.chartdata,
+          data: {
+            ...prevState.chartdata.data,
+            labels: labels,
+            datasets: [
+              {
+                label: "Hours in seconds",
+                data: data,
+                backgroundColor: backgroundColor[0],
+              },
+            ],
+          },
         },
-      ],
-    };
-    // setState((prevState) => {
-    //   return {
-    //     ...prevState,
-    //     metadata: graphData,
-    //     showGraph: true,
-    //   };
-    // });
+      };
+    });
   };
 
   return (
@@ -171,36 +189,7 @@ const Stats = () => {
           <p>{state.intervals.length}</p>
         </div>
         <div>
-          <Bar
-            data={{
-              labels: ["1", "2", "3", "4", "5"],
-              datasets: [
-                {
-                  label: "Price in USD",
-                  data: [65, 59, 80, 81, 56],
-                  backgroundColor: [
-                    "#ffbb11",
-                    "#ecf0f1",
-                    "#50AF95",
-                    "#f3ba2f",
-                    "#2a71d0",
-                  ],
-                },
-              ],
-            }}
-            options={{
-              plugins: {
-                title: {
-                  display: true,
-                  text: "Cryptocurrency prices",
-                },
-                legend: {
-                  display: true,
-                  position: "bottom",
-                },
-              },
-            }}
-          />
+          <Bar data={state.chartdata.data} options={state.chartdata.options} />
         </div>
       </div>
     </div>
