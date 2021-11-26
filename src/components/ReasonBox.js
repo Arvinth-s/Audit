@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useState } from "react";
 import {
   DialogActions,
   DialogContent,
@@ -15,13 +15,14 @@ const ReasonBox = ({ props, openHandle }) => {
   });
 
   const handleSubmit = async () => {
-    const pauseTime = props.time;
+    const pauseTime = props.pauseTime;
     const pauseReason = state.reason;
     const pause = {
-      time: pauseTime,
+      startTime: props.startTime,
+      pauseTime: pauseTime,
       reason: pauseReason,
     };
-    const res = await fetch(`http://localhost:5000/pause`, {
+    const res = await fetch(`http://localhost:5000/interval`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
