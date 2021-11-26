@@ -1,10 +1,11 @@
+import moment from "moment";
 import React, { useState } from "react";
 import ReasonBox from "./ReasonBox";
 
 const Timer = () => {
   const [state, setState] = useState({
     running: false,
-    time: {},
+    time: { h: "1", m: "0", s: "0" },
     seconds: 3600,
     id: -1,
     open: false,
@@ -45,7 +46,7 @@ const Timer = () => {
         headers: {
           "Content-type": "application/json",
         },
-        body: JSON.stringify({ time: new Date() }),
+        body: JSON.stringify({ time: moment().format("DD-MM-YYYY HH:mm:ss") }),
       }).then((res) => {
         console.log("response: ", res);
       });
@@ -73,12 +74,19 @@ const Timer = () => {
   return (
     <div className="container">
       <ReasonBox
-        props={{ open: state.open, time: new Date() }}
+        props={{
+          open: state.open,
+          time: moment().format("DD-MM-YYYY HH:mm:ss"),
+        }}
         openHandle={openHandle}
       />
       <div className="timer-glow">
         <div className="timer">
-          <h3>{state.seconds}</h3>
+          <h3>
+            {state.time.h}
+            {"h"} {state.time.m}
+            {"m"} {state.time.s} {"s"}
+          </h3>
           <button className="btn" onClick={toggleTimer}>
             {!state.running ? "START" : "PAUSE"}
           </button>
