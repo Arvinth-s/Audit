@@ -62,7 +62,7 @@ const CustomTextField = ({ props }) => {
       <TextField
         className={classes.root}
         id="standard-basic"
-        label="Title"
+        label={props.label}
         variant="standard"
         fullWidth={true}
         InputLabelProps={{

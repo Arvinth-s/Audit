@@ -1,17 +1,18 @@
 import { React, useState, useEffect } from "react";
 import moment from "moment";
 import CustomTextField from "./CustomTextField";
-
+import DateTimePicker from "react-datetime-picker";
 const Tasks = () => {
-  const [state, setstate] = useState({
+  const [state, setState] = useState({
     newTask: {
       title: "",
       description: "",
+      deadline: "",
     },
     tasks: [],
   });
   const titleHandler = (value) => {
-    setstate((prevState) => {
+    setState((prevState) => {
       return {
         ...prevState,
         newTask: { ...prevState.newTask, title: value },
@@ -19,7 +20,7 @@ const Tasks = () => {
     });
   };
   const descriptionHandler = (value) => {
-    setstate((prevState) => {
+    setState((prevState) => {
       return {
         ...prevState,
         newTask: { ...prevState.newTask, description: value },
@@ -33,7 +34,7 @@ const Tasks = () => {
       });
       const data = await res.json();
       console.log("data:", data);
-      setstate((prevState) => {
+      setState((prevState) => {
         return { ...prevState, tasks: data };
       });
       return data;
@@ -50,14 +51,37 @@ const Tasks = () => {
               <CustomTextField
                 key={1}
                 props={{
+                  label: "Title",
                   textHandler: titleHandler,
                 }}
               />
               <CustomTextField
                 key={2}
                 props={{
+                  label: "Description",
                   textHandler: descriptionHandler,
                 }}
+              />
+              <DateTimePicker
+                onChange={(date) => {
+                  console.log(
+                    "date",
+                    date,
+                    moment(date, "dddd MM-DD-YYYY HH:mm:ss a").format(
+                      "y-MM-DD HH:mm"
+                    )
+                  );
+                  setState((prevState) => {
+                    return {
+                      ...prevState,
+                      newTask: {
+                        ...prevState.newTask,
+                        deadline: date,
+                      },
+                    };
+                  });
+                }}
+                value={state.newTask.deadline}
               />
             </div>
           </div>
