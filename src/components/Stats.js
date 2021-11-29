@@ -68,6 +68,7 @@ const Stats = () => {
         const date1 = moment(interval.pauseTime, "DD-MM-YYYY HH:mm:ss"),
           date2 = moment(interval.startTime, "DD-MM-YYYY HH:mm:ss");
         sum += date1.diff(date2, "seconds");
+        return 0;
       });
 
       let avg = (sum / intervals.length).toFixed(2);
@@ -91,7 +92,7 @@ const Stats = () => {
 
   const dayTimeAverage = async (intervals) => {
     const targetIntervals = [];
-    var i;
+    let i;
     for (i = 1; i < 10; i++) {
       targetIntervals.push("0" + i + ":00:00");
     }
@@ -99,12 +100,12 @@ const Stats = () => {
       targetIntervals.push(i + ":00:00");
     }
 
-    const testInterval = intervals.filter((value) => {
-      return (
-        moment(value.startTime, "DD-MM-YYYY HH:mm:ss").hour() <
-        moment(targetIntervals[14], "HH:mm:ss").hour()
-      );
-    });
+    // const testInterval = intervals.filter((value) => {
+    //   return (
+    //     moment(value.startTime, "DD-MM-YYYY HH:mm:ss").hour() <
+    //     moment(targetIntervals[14], "HH:mm:ss").hour()
+    //   );
+    // });
 
     var testIntervals = [];
     for (i = 0; i < 23; i++) {
