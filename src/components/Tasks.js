@@ -1,7 +1,11 @@
 import { React, useState, useEffect } from "react";
 import moment from "moment";
 import CustomTextField from "./CustomTextField";
-import DateTimePicker from "react-datetime-picker";
+import DatePicker from "./DatePicker";
+import { Button } from "@material-ui/core";
+
+//moment(date, "dddd MM-DD-YYYY HH:mm:ss a").format("y-MM-DD HH:mm"),
+
 const Tasks = () => {
   const [state, setState] = useState({
     newTask: {
@@ -27,6 +31,31 @@ const Tasks = () => {
       };
     });
   };
+
+  const submitHandler = async () => {
+    console.log("submitting...");
+    const res = await fetch(`http://localhost:5000/tasks`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        title: state.newTask.title,
+        description: state.newTask.description,
+        deadline: moment(
+          state.newTask.deadline,
+          "dddd MM-DD-YYYY HH:mm:ss a"
+        ).format("DD-MM-y HH:mm"),
+      }),
+    });
+    setState((prevState) => {
+      return {
+        ...prevState,
+        newTask: { title: "", description: "", deadline: "" },
+      };
+    });
+  };
+
   useEffect(() => {
     const fetchTasks = async () => {
       const res = await fetch(`http://localhost:5000/tasks`, {
@@ -50,39 +79,40 @@ const Tasks = () => {
             <div className="box-lists-form-wrapper">
               <CustomTextField
                 key={1}
-                props={{
-                  label: "Title",
-                  textHandler: titleHandler,
-                }}
+                label={"Title"}
+                textHandler={titleHandler}
+                value={state.newTask.title}
               />
+            </div>
+            <div className="box-lists-form-wrapper">
               <CustomTextField
                 key={2}
-                props={{
-                  label: "Description",
-                  textHandler: descriptionHandler,
-                }}
+                label={"Description"}
+                textHandler={descriptionHandler}
+                value={state.newTask.description}
               />
-              <DateTimePicker
-                onChange={(date) => {
+            </div>
+            <div className="box-lists-form-wrapper">
+              <DatePicker
+                value={state.newTask.deadline}
+                dateHandler={(value) => {
                   console.log(
-                    "date",
-                    date,
-                    moment(date, "dddd MM-DD-YYYY HH:mm:ss a").format(
-                      "y-MM-DD HH:mm"
-                    )
+                    "state.newTask.deadline",
+                    state.newTask.deadline,
+                    "value",
+                    value
                   );
                   setState((prevState) => {
                     return {
                       ...prevState,
-                      newTask: {
-                        ...prevState.newTask,
-                        deadline: date,
-                      },
+                      newTask: { ...prevState.newTask, deadline: value },
                     };
                   });
                 }}
-                value={state.newTask.deadline}
               />
+              <Button variant="contained" onClick={submitHandler}>
+                Submit
+              </Button>
             </div>
           </div>
           {state.tasks.map((task, idx) => {

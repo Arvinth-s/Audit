@@ -45,8 +45,8 @@ const useStyles = (theme) =>
     disabled: {},
   }));
 
-const CustomTextField = ({ props }) => {
-  const brightColor = "#e4e4e4c5",
+const CustomTextField = (props) => {
+  const brightColor = "#c4c4c4a5",
     primaryColor = "#222831",
     secondaryColor = "#393e46",
     highlightColor = "#00adb5";
@@ -63,8 +63,11 @@ const CustomTextField = ({ props }) => {
         className={classes.root}
         id="standard-basic"
         label={props.label}
+        value={props.value}
         variant="standard"
-        fullWidth={true}
+        // margin="normal"
+        fullWidth
+        style={{ width: "200%" }}
         InputLabelProps={{
           classes: {
             root: classes.cssLabel,
