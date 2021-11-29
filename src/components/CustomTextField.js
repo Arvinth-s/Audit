@@ -1,4 +1,4 @@
-import { React, useEffect } from "react";
+import { React } from "react";
 import { TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -24,11 +24,10 @@ const useStyles = (theme) =>
     },
     cssOutlinedInput: {
       borderColor: theme.brightColor,
-      "&:not(hover):not($disabled):not($cssFocused):not($error) $notchedOutline":
-        {
-          borderColor: theme.brightColor, //default
-        },
-      "&:hover:not($disabled):not($cssFocused):not($error) $notchedOutline": {
+      "&:not(hover):not($disabled):not($cssFocused) $notchedOutline": {
+        borderColor: theme.brightColor, //default
+      },
+      "&:hover:not($disabled):not($cssFocused) $notchedOutline": {
         borderColor: theme.brightColor, //hovered #DCDCDC
       },
       "&$cssFocused $notchedOutline": {
@@ -43,6 +42,7 @@ const useStyles = (theme) =>
       color: theme.brightColor,
       borderColor: theme.brightColor,
     },
+    disabled: {},
   }));
 
 const CustomTextField = ({ props }) => {
@@ -57,10 +57,6 @@ const CustomTextField = ({ props }) => {
     brightColor: brightColor,
   })();
 
-  useEffect(() => {
-    console.log("props", props.textHandler);
-    return () => {};
-  }, [props.textHandler]);
   return (
     <div>
       <TextField

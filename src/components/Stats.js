@@ -92,23 +92,15 @@ const Stats = () => {
 
   const dayTimeAverage = async (intervals) => {
     const targetIntervals = [];
-    let i;
-    for (i = 1; i < 10; i++) {
+    for (let i = 1; i < 10; i++) {
       targetIntervals.push("0" + i + ":00:00");
     }
-    for (i = 10; i < 24; i++) {
+    for (let i = 10; i < 24; i++) {
       targetIntervals.push(i + ":00:00");
     }
 
-    // const testInterval = intervals.filter((value) => {
-    //   return (
-    //     moment(value.startTime, "DD-MM-YYYY HH:mm:ss").hour() <
-    //     moment(targetIntervals[14], "HH:mm:ss").hour()
-    //   );
-    // });
-
     var testIntervals = [];
-    for (i = 0; i < 23; i++) {
+    for (let i = 0; i < 23; i++) {
       let temp_intervals = intervals.filter((value) => {
         return (
           moment(value.startTime, "DD-MM-YYYY HH:mm:ss").hour() <
@@ -135,6 +127,7 @@ const Stats = () => {
         temp_sum += ts;
 
         console.log("moments", a, b, "tempsum", temp_sum, "ts", ts, i);
+        return 0;
       });
       testIntervals.push(temp_sum);
     }

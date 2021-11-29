@@ -10,12 +10,19 @@ const Tasks = () => {
     },
     tasks: [],
   });
-  const textHandler = (value) => {
+  const titleHandler = (value) => {
     setstate((prevState) => {
-      console.log("prevState.title", prevState.title);
       return {
         ...prevState,
         newTask: { ...prevState.newTask, title: value },
+      };
+    });
+  };
+  const descriptionHandler = (value) => {
+    setstate((prevState) => {
+      return {
+        ...prevState,
+        newTask: { ...prevState.newTask, description: value },
       };
     });
   };
@@ -41,8 +48,15 @@ const Tasks = () => {
           <div className="box-lists-form">
             <div className="box-lists-form-wrapper">
               <CustomTextField
+                key={1}
                 props={{
-                  textHandler: textHandler,
+                  textHandler: titleHandler,
+                }}
+              />
+              <CustomTextField
+                key={2}
+                props={{
+                  textHandler: descriptionHandler,
                 }}
               />
             </div>
