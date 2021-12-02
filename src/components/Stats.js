@@ -56,14 +56,12 @@ const Stats = () => {
 
   useEffect(() => {
     const fetchStats = async () => {
-      let res = await fetch(`http://localhost:5000/session/1`, {
+      let res = await fetch(`http://localhost:5000/interval`, {
         method: "GET",
       });
-      const intervals = await res.json().then((t) => {
-        return t.interval;
-      });
+      const intervals = await res.json();
 
-      console.log("intervals", intervals);
+      // console.log("intervals", intervals);
 
       let sum = 0;
       intervals.map((interval) => {
@@ -128,7 +126,7 @@ const Stats = () => {
         var ts = a - b;
         temp_sum += ts;
 
-        console.log("moments", a, b, "tempsum", temp_sum, "ts", ts, i);
+        // console.log("moments", a, b, "tempsum", temp_sum, "ts", ts, i);
         return 0;
       });
       testIntervals.push(temp_sum);
@@ -142,7 +140,7 @@ const Stats = () => {
   };
 
   const plotGraph = ({ labels, data }) => {
-    console.log("labels", labels, "data", data);
+    // console.log("labels", labels, "data", data);
     const colors = ["#50AF95", "#f3ba2f"];
     const backgroundColor = [
       labels.map((label, idx) => {

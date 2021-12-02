@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReasonBox from "./ReasonBox";
 import { TextField } from "@material-ui/core";
 
@@ -14,6 +14,29 @@ const Timer = () => {
     startTime: 0,
     sessionId: -1,
   });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch(`http://localhost:5000/interval`, {
+        method: "GET",
+      });
+      let max = 0;
+      const data = await res.json();
+      data.map((interval) => {
+        max = max < interval.session ? interval.session : max;
+        return interval.session;
+      });
+      const ssid = max + 1;
+      console.log("ssid", ssid);
+      setState((prevState) => {
+        return {
+          ...prevState,
+          sessionId: ssid,
+        };
+      });
+    };
+    fetchData();
+  }, []);
 
   const countDown = () => {
     setState((prevState) => {
@@ -45,17 +68,6 @@ const Timer = () => {
 
   const toggleTimer = async () => {
     if (!state.started) {
-      //clicked start
-      const res = await fetch(`http://localhost:5000/session`, {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({
-          startTime: moment().format("DD-MM-YYYY HH:mm:ss"),
-        }),
-      });
-      const data = await res.json();
       let id = setInterval(countDown, 1000);
       setState((prevState) => {
         return {
@@ -64,7 +76,6 @@ const Timer = () => {
           running: true,
           id: id,
           startTime: moment().format("DD-MM-YYYY HH:mm:ss"),
-          sessionId: data.id,
         };
       });
     } else {
@@ -75,6 +86,7 @@ const Timer = () => {
           running: false,
           started: false,
           time: { h: "1", m: "0", s: "0" },
+          sessionId: prevState.sessionId + 1,
           // open: true,
         };
       });

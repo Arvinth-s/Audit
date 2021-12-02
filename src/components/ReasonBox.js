@@ -21,17 +21,16 @@ const ReasonBox = ({ props, openHandle }) => {
       startTime: props.startTime,
       pauseTime: pauseTime,
       reason: pauseReason,
+      session: props.id,
     };
-    const res = await fetch(
-      `http://localhost:5000/session/${props.id}/interval`,
-      {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(pause),
-      }
-    );
+    console.log("pause", pause);
+    const res = await fetch(`http://localhost:5000/interval`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(pause),
+    });
 
     console.log("fetch response", res);
     setState((prevState) => {
