@@ -42,7 +42,7 @@ const Timer = () => {
 
   const toggleTimer = async () => {
     if (!state.running) {
-      let id = setInterval(countDown, state.seconds);
+      let id = setInterval(countDown, 1000);
       setState((prevState) => {
         return {
           ...prevState,

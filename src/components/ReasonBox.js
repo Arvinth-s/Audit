@@ -31,6 +31,9 @@ const ReasonBox = ({ props, openHandle }) => {
     });
 
     console.log("fetch response", res);
+    setState((prevState) => {
+      return { ...prevState, reason: "" };
+    });
     openHandle(false);
   };
 
