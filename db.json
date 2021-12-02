@@ -45,22 +45,28 @@
   ],
   "tasks": [
     {
-      "title": "FOC assignment-2",
-      "description": "Complete MATLAB assignment",
-      "deadline": "27-11-2021 20:05:29",
-      "id": 1
+      "title": "WiComm",
+      "description": "End semester",
+      "deadline": "04-12-2021 12:00",
+      "id": 4
     },
     {
-      "title": "FOC assignment-3",
-      "description": "Complete MATLAB assignment",
-      "deadline": "28-11-2021 00:05:29",
-      "id": 2
+      "title": "FOC",
+      "description": "semester",
+      "deadline": "06-12-2021 10:00",
+      "id": 5
     },
     {
-      "title": "Comprehensive Viva",
-      "description": "Objective type",
-      "deadline": "29-11-2021 15:00",
-      "id": 3
+      "title": "MW",
+      "description": "semester",
+      "deadline": "07-12-2021 10:00",
+      "id": 6
+    },
+    {
+      "title": "HSIR",
+      "description": "semester",
+      "deadline": "09-12-2021 10:00",
+      "id": 7
     }
   ]
 }

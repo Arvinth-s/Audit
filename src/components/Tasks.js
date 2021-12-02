@@ -3,6 +3,7 @@ import moment from "moment";
 import CustomTextField from "./CustomTextField";
 import DatePicker from "./DatePicker";
 import { Button } from "@material-ui/core";
+import CloseIcon from "@mui/icons-material/Close";
 
 //moment(date, "dddd MM-DD-YYYY HH:mm:ss a").format("y-MM-DD HH:mm"),
 
@@ -14,6 +15,7 @@ const Tasks = () => {
       deadline: "",
     },
     tasks: [],
+    opened: -1,
   });
   const titleHandler = (value) => {
     setState((prevState) => {
@@ -48,16 +50,39 @@ const Tasks = () => {
         ).format("DD-MM-y HH:mm"),
       }),
     });
+    const data = await res.json();
+    console.log("data", data);
     setState((prevState) => {
+      console.log({
+        ...prevState,
+        newTask: { title: "", description: "", deadline: "" },
+        tasks: [...prevState.tasks, data],
+      });
       return {
         ...prevState,
         newTask: { title: "", description: "", deadline: "" },
+        tasks: [...prevState.tasks, data],
       };
     });
   };
 
+  const deleteTask = async (id) => {
+    const res = await fetch(`http://localhost:5000/tasks/${id}`, {
+      method: "DELETE",
+    });
+    res.status === 200
+      ? setState((prevState) => {
+          return {
+            ...prevState,
+            tasks: prevState.tasks.filter((task) => task.id !== id),
+          };
+        })
+      : alert("Error deleting tasks");
+  };
+
   useEffect(() => {
     const fetchTasks = async () => {
+      console.log("box-lists-wrapper" + (1 === state.opened ? "-opened" : ""));
       const res = await fetch(`http://localhost:5000/tasks`, {
         method: "GET",
       });
@@ -117,11 +142,41 @@ const Tasks = () => {
           </div>
           {state.tasks.map((task, idx) => {
             return (
-              <div className="box-lists-wrapper" key={idx}>
-                <h4>{task.title}</h4>
-                <h4>
-                  {moment(task.deadline, "DD-MM-YYYY HH:mm:ss").fromNow()}
-                </h4>
+              <div
+                className={
+                  "box-lists-wrapper" +
+                  (task.id === state.opened ? "-opened" : "")
+                }
+                key={idx}
+                onDoubleClick={() => {
+                  setState((prevState) => {
+                    return {
+                      ...prevState,
+                      opened: prevState.opened !== task.id ? task.id : -1,
+                    };
+                  });
+                }}
+              >
+                <div className={"box-lists-wrapper-content"}>
+                  <h4>{task.title}</h4>
+                  <div>
+                    <p style={{ display: "inline-block" }}>
+                      {moment(task.deadline, "DD-MM-YYYY HH:mm:ss").fromNow()}
+                    </p>
+                    <CloseIcon
+                      onClick={(e) => {
+                        deleteTask(task.id);
+                      }}
+                      style={{ display: "inline-block" }}
+                    />
+                  </div>
+                </div>
+                {state.opened === task.id && (
+                  <div className="box-lists-wrapper-content">
+                    {" "}
+                    {task.description}
+                  </div>
+                )}
               </div>
             );
           })}
