@@ -51,6 +51,21 @@ body::-webkit-scrollbar {
   cursor: pointer;
   width: 100px;
   height: 40px;
+  margin: 10px;
+}
+
+.secondary-btn {
+  display: block;
+  background-color: var(--bright-color);
+  color: var(--secondary-color);
+  font-size: medium;
+  border: solid var(--secondary-color);
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100px;
+  height: 40px;
+  margin: 10px;
 }
 
 .box {

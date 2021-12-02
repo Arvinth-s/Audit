@@ -1,10 +1,12 @@
 import moment from "moment";
 import React, { useState } from "react";
 import ReasonBox from "./ReasonBox";
+import { TextField } from "@material-ui/core";
 
 const Timer = () => {
   const [state, setState] = useState({
     running: false,
+    started: false,
     time: { h: "1", m: "0", s: "0" },
     seconds: 3600,
     id: -1,
@@ -41,7 +43,36 @@ const Timer = () => {
   };
 
   const toggleTimer = async () => {
+    if (!state.started) {
+      //clicked start
+      let id = setInterval(countDown, 1000);
+      setState((prevState) => {
+        return {
+          ...prevState,
+          started: true,
+          running: true,
+          id: id,
+          startTime: moment().format("DD-MM-YYYY HH:mm:ss"),
+        };
+      });
+    } else {
+      //clicked stop
+      setState((prevState) => {
+        return {
+          ...prevState,
+          running: false,
+          started: false,
+          time: { h: "1", m: "0", s: "0" },
+          // open: true,
+        };
+      });
+      clearInterval(state.id);
+    }
+  };
+
+  const pauseTimer = async () => {
     if (!state.running) {
+      //clicked resume
       let id = setInterval(countDown, 1000);
       setState((prevState) => {
         return {
@@ -52,6 +83,7 @@ const Timer = () => {
         };
       });
     } else {
+      //clicked pause
       setState((prevState) => {
         return {
           ...prevState,
@@ -80,9 +112,16 @@ const Timer = () => {
             {"h"} {state.time.m}
             {"m"} {state.time.s} {"s"}
           </h2>
-          <button className="btn" onClick={toggleTimer}>
-            {!state.running ? "START" : "PAUSE"}
-          </button>
+          <div style={{ display: "flex" }}>
+            {state.started && (
+              <button className="secondary-btn" onClick={pauseTimer}>
+                {state.running ? "PAUSE" : "RESUME"}
+              </button>
+            )}
+            <button className="btn" onClick={toggleTimer}>
+              {!state.started ? "START" : "STOP"}
+            </button>
+          </div>
         </div>
       </div>
     </div>
