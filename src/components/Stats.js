@@ -56,10 +56,12 @@ const Stats = () => {
 
   useEffect(() => {
     const fetchStats = async () => {
-      let res = await fetch(`http://localhost:5000/interval`, {
+      let res = await fetch(`http://localhost:5000/session/1`, {
         method: "GET",
       });
-      const intervals = await res.json();
+      const intervals = await res.json().then((t) => {
+        return t.interval;
+      });
 
       console.log("intervals", intervals);
 

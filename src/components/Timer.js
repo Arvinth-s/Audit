@@ -12,6 +12,7 @@ const Timer = () => {
     id: -1,
     open: false,
     startTime: 0,
+    sessionId: -1,
   });
 
   const countDown = () => {
@@ -45,6 +46,16 @@ const Timer = () => {
   const toggleTimer = async () => {
     if (!state.started) {
       //clicked start
+      const res = await fetch(`http://localhost:5000/session`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          startTime: moment().format("DD-MM-YYYY HH:mm:ss"),
+        }),
+      });
+      const data = await res.json();
       let id = setInterval(countDown, 1000);
       setState((prevState) => {
         return {
@@ -53,6 +64,7 @@ const Timer = () => {
           running: true,
           id: id,
           startTime: moment().format("DD-MM-YYYY HH:mm:ss"),
+          sessionId: data.id,
         };
       });
     } else {
@@ -100,6 +112,7 @@ const Timer = () => {
       <ReasonBox
         props={{
           open: state.open,
+          id: state.sessionId,
           pauseTime: moment().format("DD-MM-YYYY HH:mm:ss"),
           startTime: state.startTime,
         }}
