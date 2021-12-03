@@ -3,6 +3,7 @@ import Timer from "./components/Timer";
 import Header from "./components/Header";
 import Stats from "./components/Stats";
 import Tasks from "./components/Tasks";
+import CustomCalendar from "./components/CustomCalendar";
 
 function App() {
   return (
@@ -14,6 +15,9 @@ function App() {
       </div>
       <div className="page">
         <Tasks />
+      </div>
+      <div className="page">
+        <CustomCalendar />
       </div>
     </div>
   );
