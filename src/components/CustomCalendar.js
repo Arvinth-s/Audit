@@ -1,14 +1,44 @@
-import React from "react";
+import { React, useState, useEffect } from "react";
+import moment from "moment";
 
 import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import { Calendar } from "@fullcalendar/core";
 import timeGridPlugin from "@fullcalendar/timegrid";
 
 import "@fullcalendar/daygrid/main.css";
 
 const CustomCalendar = () => {
-  const events = [{ title: "today's event", date: new Date() }];
+  const [state, setState] = useState({
+    tasks: [],
+    events: [],
+  });
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      const res = await fetch(`http://localhost:5000/tasks`, {
+        method: "GET",
+      });
+      const data = await res.json();
+      let event = [];
+      console.log("data", data);
+      data.map((task) => {
+        event.push({
+          title: task.title,
+          date: new Date(
+            moment(task.deadline, "DD-MM-y HH:mm").format(
+              "ddd MMMM DD yy hh:mm:ss a"
+            )
+          ),
+        });
+        return task;
+      });
+      setState((prevState) => {
+        return { ...prevState, tasks: data, events: event };
+      });
+      console.log("event", event);
+      return state.tasks;
+    };
+    fetchTasks();
+  }, []);
 
   return (
     <div className="container">
@@ -24,7 +54,7 @@ const CustomCalendar = () => {
         <FullCalendar
           initialView="timeGridWeek"
           plugins={[timeGridPlugin]}
-          events={events}
+          events={state.events}
         />
       </div>
       {/* </div> */}
