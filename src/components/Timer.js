@@ -1,11 +1,12 @@
 import moment from "moment";
 import React, { useState, useEffect } from "react";
 import ReasonBox from "./ReasonBox";
-import { TextField } from "@material-ui/core";
+import bell from "../bell.mp3";
 
 const Timer = () => {
   const sessionTime = 10 * 1,
     relaxTime = 5 * 1;
+  const audio = new Audio(bell);
   const [state, setState] = useState({
     running: false,
     started: false,
@@ -43,6 +44,7 @@ const Timer = () => {
 
   const countDown = () => {
     setState((prevState) => {
+      prevState.seconds <= 2 ? audio.play() : audio.pause();
       return {
         ...prevState,
         time: secondsToTime(prevState.seconds),
@@ -77,6 +79,7 @@ const Timer = () => {
 
   const toggleTimer = async () => {
     if (!state.started) {
+      //clicked start
       let id = setInterval(countDown, 1000);
       setState((prevState) => {
         return {
@@ -89,13 +92,32 @@ const Timer = () => {
       });
     } else {
       //clicked stop
+      const res = await fetch(`http://localhost:5000/interval`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          startTime: state.startTime,
+          pauseTime: moment().format("DD-MM-YYYY HH:mm:ss"),
+          reason: "session completed",
+          session: state.relax
+            ? moment()
+                .subtract(relaxTime - state.seconds, "seconds")
+                .format("DD-MM-YYYY HH:mm:ss")
+            : state.sessionId,
+        }),
+      });
+
       setState((prevState) => {
         return {
           ...prevState,
           running: false,
           started: false,
+          seconds: sessionTime,
           time: secondsToTime(sessionTime),
           sessionId: prevState.sessionId + 1,
+          relax: false,
           // open: true,
         };
       });

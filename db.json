@@ -174,27 +174,6 @@
       "reason": "session id should be 5",
       "session": 5,
       "id": 25
-    },
-    {
-      "startTime": "03-12-2021 08:29:53",
-      "pauseTime": "03-12-2021 08:30:01",
-      "reason": "morning routine",
-      "session": 6,
-      "id": 26
-    },
-    {
-      "startTime": "03-12-2021 08:30:12",
-      "pauseTime": "03-12-2021 08:30:21",
-      "reason": "morning routine - 2",
-      "session": 6,
-      "id": 27
-    },
-    {
-      "startTime": "04-12-2021 20:45:26",
-      "pauseTime": "04-12-2021 20:48:44",
-      "reason": "after adding focus and relax",
-      "session": 7,
-      "id": 28
     }
   ],
   "tasks": [
