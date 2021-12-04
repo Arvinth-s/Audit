@@ -188,6 +188,13 @@
       "reason": "morning routine - 2",
       "session": 6,
       "id": 27
+    },
+    {
+      "startTime": "04-12-2021 20:45:26",
+      "pauseTime": "04-12-2021 20:48:44",
+      "reason": "after adding focus and relax",
+      "session": 7,
+      "id": 28
     }
   ],
   "tasks": [

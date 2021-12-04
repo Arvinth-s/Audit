@@ -19,8 +19,8 @@ body::-webkit-scrollbar {
   --secondary-color: #393e46;
   --highlight-color: #00adb5;
   --bright-color: #e4e4e4c5;
-  --inner-radius: 150px;
-  --outer-radius: 160px;
+  --inner-radius: 170px;
+  --outer-radius: 180px;
   --header-height: 12vh;
 }
 

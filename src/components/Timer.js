@@ -4,15 +4,18 @@ import ReasonBox from "./ReasonBox";
 import { TextField } from "@material-ui/core";
 
 const Timer = () => {
+  const sessionTime = 10 * 1,
+    relaxTime = 5 * 1;
   const [state, setState] = useState({
     running: false,
     started: false,
-    time: { h: "1", m: "0", s: "0" },
-    seconds: 3600,
+    time: { h: "0", m: "0", s: "10" },
+    seconds: sessionTime,
     id: -1,
     open: false,
     startTime: 0,
     sessionId: -1,
+    relax: false,
   });
 
   useEffect(() => {
@@ -43,7 +46,13 @@ const Timer = () => {
       return {
         ...prevState,
         time: secondsToTime(prevState.seconds),
-        seconds: prevState.seconds - 1,
+        seconds:
+          prevState.seconds !== 0
+            ? prevState.seconds - 1
+            : prevState.relax
+            ? sessionTime
+            : relaxTime,
+        relax: (prevState.seconds === 0) ^ prevState.relax,
       };
     });
   };
@@ -85,7 +94,7 @@ const Timer = () => {
           ...prevState,
           running: false,
           started: false,
-          time: { h: "1", m: "0", s: "0" },
+          time: secondsToTime(sessionTime),
           sessionId: prevState.sessionId + 1,
           // open: true,
         };
@@ -132,6 +141,7 @@ const Timer = () => {
       />
       <div className="timer-glow">
         <div className="timer">
+          <h2>{state.relax ? "Relax..." : "Focus..."}</h2>
           <h2>
             {state.time.h}
             {"h"} {state.time.m}
