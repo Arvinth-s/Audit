@@ -2,6 +2,7 @@ import moment from "moment";
 import React, { useState, useEffect } from "react";
 import ReasonBox from "./ReasonBox";
 import bell from "../bell.mp3";
+import { fetchAPI } from "./fetchAPI";
 
 const Timer = () => {
   const sessionTime = 10 * 1,
@@ -21,11 +22,11 @@ const Timer = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(`http://localhost:5000/interval`, {
+      const data = await fetchAPI("interval", {
         method: "GET",
       });
       let max = 0;
-      const data = await res.json();
+
       data.map((interval) => {
         max = max < interval.session ? interval.session : max;
         return interval.session;
@@ -92,7 +93,7 @@ const Timer = () => {
       });
     } else {
       //clicked stop
-      const res = await fetch(`http://localhost:5000/interval`, {
+      await fetchAPI("interval", {
         method: "POST",
         headers: {
           "Content-type": "application/json",
