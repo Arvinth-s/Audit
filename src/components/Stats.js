@@ -146,7 +146,6 @@ const Stats = () => {
       }),
     ];
 
-    console.log("bgcolor", backgroundColor);
     setState((prevState) => {
       return {
         ...prevState,
