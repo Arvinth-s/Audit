@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from "react";
 import moment from "moment";
+import { fetchAPI } from "./fetchAPI";
 
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -14,12 +15,12 @@ const CustomCalendar = () => {
 
   useEffect(() => {
     const fetchTasks = async () => {
-      const res = await fetch(`http://localhost:5000/tasks`, {
-        method: "GET",
-      });
-      const data = await res.json();
+      const data = await fetchAPI("tasks", { method: "GET" });
       let event = [];
       console.log("data", data);
+      if (!data || data.length == 0) {
+        return null;
+      }
       data.map((task) => {
         event.push({
           title: task.title,

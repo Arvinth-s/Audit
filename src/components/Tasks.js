@@ -4,6 +4,7 @@ import CustomTextField from "./CustomTextField";
 import DatePicker from "./DatePicker";
 import { Button } from "@material-ui/core";
 import CloseIcon from "@mui/icons-material/Close";
+import { fetchAPI } from "./fetchAPI";
 
 //moment(date, "dddd MM-DD-YYYY HH:mm:ss a").format("y-MM-DD HH:mm"),
 
@@ -36,7 +37,9 @@ const Tasks = () => {
 
   const submitHandler = async () => {
     console.log("submitting...");
-    const res = await fetch(`http://localhost:5000/tasks`, {
+    let taskid = await fetchAPI(`tasks`, { method: "id" });
+    console.log("taskid", taskid);
+    const data = await fetchAPI(`tasks`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -48,28 +51,26 @@ const Tasks = () => {
           state.newTask.deadline,
           "dddd MM-DD-YYYY HH:mm:ss a"
         ).format("DD-MM-y HH:mm"),
+        id: taskid,
       }),
     });
-    const data = await res.json();
     console.log("data", data);
     setState((prevState) => {
       console.log({
         ...prevState,
         newTask: { title: "", description: "", deadline: "" },
-        tasks: [...prevState.tasks, data],
+        tasks: [...prevState.tasks, data[data.length - 1]],
       });
       return {
         ...prevState,
         newTask: { title: "", description: "", deadline: "" },
-        tasks: [...prevState.tasks, data],
+        tasks: [...prevState.tasks, data[data.length - 1]],
       };
     });
   };
 
   const deleteTask = async (id) => {
-    const res = await fetch(`http://localhost:5000/tasks/${id}`, {
-      method: "DELETE",
-    });
+    const res = await fetchAPI(`tasks`, { method: "DELETE", id: id });
     res.status === 200
       ? setState((prevState) => {
           return {
@@ -83,10 +84,7 @@ const Tasks = () => {
   useEffect(() => {
     const fetchTasks = async () => {
       console.log("box-lists-wrapper" + (1 === state.opened ? "-opened" : ""));
-      const res = await fetch(`http://localhost:5000/tasks`, {
-        method: "GET",
-      });
-      const data = await res.json();
+      const data = await fetchAPI(`tasks`, { method: "GET" });
       console.log("data:", data);
       setState((prevState) => {
         return { ...prevState, tasks: data };
@@ -140,46 +138,47 @@ const Tasks = () => {
               </Button>
             </div>
           </div>
-          {state.tasks.map((task, idx) => {
-            return (
-              <div
-                className={
-                  "box-lists-wrapper" +
-                  (task.id === state.opened ? "-opened" : "")
-                }
-                key={idx}
-                onDoubleClick={() => {
-                  setState((prevState) => {
-                    return {
-                      ...prevState,
-                      opened: prevState.opened !== task.id ? task.id : -1,
-                    };
-                  });
-                }}
-              >
-                <div className={"box-lists-wrapper-content"}>
-                  <h4>{task.title}</h4>
-                  <div>
-                    <p style={{ display: "inline-block" }}>
-                      {moment(task.deadline, "DD-MM-YYYY HH:mm:ss").fromNow()}
-                    </p>
-                    <CloseIcon
-                      onClick={(e) => {
-                        deleteTask(task.id);
-                      }}
-                      style={{ display: "inline-block" }}
-                    />
+          {state.tasks &&
+            state.tasks.map((task, idx) => {
+              return (
+                <div
+                  className={
+                    "box-lists-wrapper" +
+                    (task.id === state.opened ? "-opened" : "")
+                  }
+                  key={idx}
+                  onDoubleClick={() => {
+                    setState((prevState) => {
+                      return {
+                        ...prevState,
+                        opened: prevState.opened !== task.id ? task.id : -1,
+                      };
+                    });
+                  }}
+                >
+                  <div className={"box-lists-wrapper-content"}>
+                    <h4>{task.title}</h4>
+                    <div>
+                      <p style={{ display: "inline-block" }}>
+                        {moment(task.deadline, "DD-MM-YYYY HH:mm:ss").fromNow()}
+                      </p>
+                      <CloseIcon
+                        onClick={(e) => {
+                          deleteTask(task.id);
+                        }}
+                        style={{ display: "inline-block" }}
+                      />
+                    </div>
                   </div>
+                  {state.opened === task.id && (
+                    <div className="box-lists-wrapper-content">
+                      {" "}
+                      {task.description}
+                    </div>
+                  )}
                 </div>
-                {state.opened === task.id && (
-                  <div className="box-lists-wrapper-content">
-                    {" "}
-                    {task.description}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+              );
+            })}
         </div>
       </div>
     </div>

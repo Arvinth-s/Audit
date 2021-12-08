@@ -9,6 +9,7 @@ import {
   Title,
   registerables,
 } from "chart.js";
+import { fetchAPI } from "./fetchAPI";
 
 import "@testing-library/react";
 
@@ -56,13 +57,12 @@ const Stats = () => {
 
   useEffect(() => {
     const fetchStats = async () => {
-      let res = await fetch(`http://localhost:5000/interval`, {
+      const intervals = await fetchAPI("interval", {
         method: "GET",
       });
-      const intervals = await res.json();
-
-      // console.log("intervals", intervals);
-
+      if (!intervals || intervals.length === 0) {
+        return null;
+      }
       let sum = 0;
       intervals.map((interval) => {
         const date1 = moment(interval.pauseTime, "DD-MM-YYYY HH:mm:ss"),
@@ -98,9 +98,8 @@ const Stats = () => {
     for (let i = 10; i < 24; i++) {
       targetIntervals.push(i + ":00:00");
     }
-
     var testIntervals = [];
-    for (let i = 0; i < 23; i++) {
+    for (let i = 0; intervals.length > 0 && i < 23; i++) {
       let temp_intervals = intervals.filter((value) => {
         return (
           moment(value.startTime, "DD-MM-YYYY HH:mm:ss").hour() <
@@ -124,15 +123,13 @@ const Stats = () => {
           60 * moment(interval.startTime, "DD-MM-YYYY HH:mm:ss").minute() +
           moment(interval.startTime, "DD-MM-YYYY HH:mm:ss").seconds();
         var ts = a - b;
-        temp_sum += ts;
+        temp_sum += Math.log10(1 + ts);
 
-        // console.log("moments", a, b, "tempsum", temp_sum, "ts", ts, i);
         return 0;
       });
       testIntervals.push(temp_sum);
     }
 
-    console.log("testIntervals", testIntervals);
     plotGraph({
       labels: targetIntervals,
       data: testIntervals,
@@ -148,7 +145,6 @@ const Stats = () => {
       }),
     ];
 
-    console.log("bgcolor", backgroundColor);
     setState((prevState) => {
       return {
         ...prevState,
@@ -159,7 +155,7 @@ const Stats = () => {
             labels: labels,
             datasets: [
               {
-                label: "Time in seconds",
+                label: "Time in log (seconds)",
                 data: data,
                 backgroundColor: backgroundColor[0],
               },

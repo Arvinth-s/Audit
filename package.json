@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "homepage": "http://Arvinth-s.github.io/Audit",
+=======
+  "home": "/http://Arvinth-s.github.io/Audit",
+>>>>>>> client-programming
   "name": "audit",
   "version": "0.1.0",
   "private": true,
@@ -61,5 +65,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^3.2.3"
   }
 }
