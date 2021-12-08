@@ -18,6 +18,9 @@ const CustomCalendar = () => {
       const data = await fetchAPI("tasks", { method: "GET" });
       let event = [];
       console.log("data", data);
+      if (!data || data.length == 0) {
+        return null;
+      }
       data.map((task) => {
         event.push({
           title: task.title,

@@ -37,6 +37,8 @@ const Tasks = () => {
 
   const submitHandler = async () => {
     console.log("submitting...");
+    let taskid = await fetchAPI(`tasks`, { method: "id" });
+    console.log("taskid", taskid);
     const data = await fetchAPI(`tasks`, {
       method: "POST",
       headers: {
@@ -49,6 +51,7 @@ const Tasks = () => {
           state.newTask.deadline,
           "dddd MM-DD-YYYY HH:mm:ss a"
         ).format("DD-MM-y HH:mm"),
+        id: taskid,
       }),
     });
     console.log("data", data);
@@ -56,20 +59,18 @@ const Tasks = () => {
       console.log({
         ...prevState,
         newTask: { title: "", description: "", deadline: "" },
-        tasks: [...prevState.tasks, data],
+        tasks: [...prevState.tasks, data[data.length - 1]],
       });
       return {
         ...prevState,
         newTask: { title: "", description: "", deadline: "" },
-        tasks: [...prevState.tasks, data],
+        tasks: [...prevState.tasks, data[data.length - 1]],
       };
     });
   };
 
   const deleteTask = async (id) => {
-    const res = await fetch(`http://localhost:5000/tasks/${id}`, {
-      method: "DELETE",
-    });
+    const res = await fetchAPI(`tasks`, { method: "DELETE", id: id });
     res.status === 200
       ? setState((prevState) => {
           return {
@@ -137,46 +138,48 @@ const Tasks = () => {
               </Button>
             </div>
           </div>
-          {state.tasks.map((task, idx) => {
-            return (
-              <div
-                className={
-                  "box-lists-wrapper" +
-                  (task.id === state.opened ? "-opened" : "")
-                }
-                key={idx}
-                onDoubleClick={() => {
-                  setState((prevState) => {
-                    return {
-                      ...prevState,
-                      opened: prevState.opened !== task.id ? task.id : -1,
-                    };
-                  });
-                }}
-              >
-                <div className={"box-lists-wrapper-content"}>
-                  <h4>{task.title}</h4>
-                  <div>
-                    <p style={{ display: "inline-block" }}>
-                      {moment(task.deadline, "DD-MM-YYYY HH:mm:ss").fromNow()}
-                    </p>
-                    <CloseIcon
-                      onClick={(e) => {
-                        deleteTask(task.id);
-                      }}
-                      style={{ display: "inline-block" }}
-                    />
+          {state.tasks &&
+            state.tasks.map((task, idx) => {
+              console.log("task idx", idx, task);
+              return (
+                <div
+                  className={
+                    "box-lists-wrapper" +
+                    (task.id === state.opened ? "-opened" : "")
+                  }
+                  key={idx}
+                  onDoubleClick={() => {
+                    setState((prevState) => {
+                      return {
+                        ...prevState,
+                        opened: prevState.opened !== task.id ? task.id : -1,
+                      };
+                    });
+                  }}
+                >
+                  <div className={"box-lists-wrapper-content"}>
+                    <h4>{task.title}</h4>
+                    <div>
+                      <p style={{ display: "inline-block" }}>
+                        {moment(task.deadline, "DD-MM-YYYY HH:mm:ss").fromNow()}
+                      </p>
+                      <CloseIcon
+                        onClick={(e) => {
+                          deleteTask(task.id);
+                        }}
+                        style={{ display: "inline-block" }}
+                      />
+                    </div>
                   </div>
+                  {state.opened === task.id && (
+                    <div className="box-lists-wrapper-content">
+                      {" "}
+                      {task.description}
+                    </div>
+                  )}
                 </div>
-                {state.opened === task.id && (
-                  <div className="box-lists-wrapper-content">
-                    {" "}
-                    {task.description}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+              );
+            })}
         </div>
       </div>
     </div>

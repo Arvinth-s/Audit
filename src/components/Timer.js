@@ -26,7 +26,9 @@ const Timer = () => {
         method: "GET",
       });
       let max = 0;
-
+      if (!data || data.length === 0) {
+        return null;
+      }
       data.map((interval) => {
         max = max < interval.session ? interval.session : max;
         return interval.session;
@@ -93,6 +95,7 @@ const Timer = () => {
       });
     } else {
       //clicked stop
+      let intervalid = await fetchAPI(`interval`, { method: "id" });
       await fetchAPI("interval", {
         method: "POST",
         headers: {
@@ -107,6 +110,7 @@ const Timer = () => {
                 .subtract(relaxTime - state.seconds, "seconds")
                 .format("DD-MM-YYYY HH:mm:ss")
             : state.sessionId,
+          id: intervalid,
         }),
       });
 
