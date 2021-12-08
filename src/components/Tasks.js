@@ -54,13 +54,12 @@ const Tasks = () => {
         id: taskid,
       }),
     });
-    console.log("data", data);
     setState((prevState) => {
-      console.log({
-        ...prevState,
-        newTask: { title: "", description: "", deadline: "" },
-        tasks: [...prevState.tasks, data[data.length - 1]],
-      });
+      // console.log({
+      //   ...prevState,
+      //   newTask: { title: "", description: "", deadline: "" },
+      //   tasks: [...prevState.tasks, data[data.length - 1]],
+      // });
       return {
         ...prevState,
         newTask: { title: "", description: "", deadline: "" },
