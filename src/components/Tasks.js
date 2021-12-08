@@ -140,7 +140,6 @@ const Tasks = () => {
           </div>
           {state.tasks &&
             state.tasks.map((task, idx) => {
-              console.log("task idx", idx, task);
               return (
                 <div
                   className={

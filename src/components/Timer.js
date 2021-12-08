@@ -16,7 +16,7 @@ const Timer = () => {
     id: -1,
     open: false,
     startTime: 0,
-    sessionId: -1,
+    sessionId: 1,
     relax: false,
   });
 
