@@ -8,6 +8,7 @@ import {
   Button,
   TextField,
 } from "@material-ui/core";
+import { fetchAPI } from "./fetchAPI";
 
 const ReasonBox = ({ props, openHandle }) => {
   const [state, setState] = useState({
@@ -17,14 +18,16 @@ const ReasonBox = ({ props, openHandle }) => {
   const handleSubmit = async () => {
     const pauseTime = props.pauseTime;
     const pauseReason = state.reason;
+    const intervalid = await fetchAPI(`interval`, { method: "id" });
     const pause = {
       startTime: props.startTime,
       pauseTime: pauseTime,
       reason: pauseReason,
       session: props.id,
+      id: intervalid,
     };
     console.log("pause", pause);
-    const res = await fetch(`http://localhost:5000/interval`, {
+    const res = await fetchAPI(`interval`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",

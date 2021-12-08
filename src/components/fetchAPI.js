@@ -1,12 +1,25 @@
 export async function fetchAPI(field, metadata) {
   // const res = await fetch(`http://localhost:5000/${field}`, metadata);
-  let res = localStorage.getItem(`${field}`);
-  // console.log("res", res);
-  let data = await JSON.parse(res);
+  let res;
+  try {
+    res = localStorage.getItem(`${field}`);
+  } catch (e) {
+    console.log("error", e);
+    localStorage.setItem(`${field}`, JSON.stringify("[]"));
+    res = localStorage.getItem(`${field}`);
+  }
   let id = 1;
-  data.map((_data) => {
-    id = Math.max(_data.id + 1, id);
-  });
+  let data = [];
+  if (!res || res === '"[]"') {
+    localStorage.setItem(`${field}`, JSON.stringify("[]"));
+    res = localStorage.getItem(`${field}`);
+  } else {
+    data = await JSON.parse(res);
+    data.map((_data) => {
+      id = Math.max(_data.id + 1, id);
+    });
+  }
+
   // console.log("id:", id);
   // console.log("data", data);
   // console.log("metadata", metadata);

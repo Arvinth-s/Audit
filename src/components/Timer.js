@@ -96,23 +96,25 @@ const Timer = () => {
     } else {
       //clicked stop
       let intervalid = await fetchAPI(`interval`, { method: "id" });
-      await fetchAPI("interval", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({
-          startTime: state.startTime,
-          pauseTime: moment().format("DD-MM-YYYY HH:mm:ss"),
-          reason: "session completed",
-          session: state.relax
-            ? moment()
-                .subtract(relaxTime - state.seconds, "seconds")
-                .format("DD-MM-YYYY HH:mm:ss")
-            : state.sessionId,
-          id: intervalid,
-        }),
-      });
+      if (state.running) {
+        await fetchAPI("interval", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            startTime: state.startTime,
+            pauseTime: moment().format("DD-MM-YYYY HH:mm:ss"),
+            reason: "session completed",
+            session: state.relax
+              ? moment()
+                  .subtract(relaxTime - state.seconds, "seconds")
+                  .format("DD-MM-YYYY HH:mm:ss")
+              : state.sessionId,
+            id: intervalid,
+          }),
+        });
+      }
 
       setState((prevState) => {
         return {

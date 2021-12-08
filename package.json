@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
   "homepage": "http://Arvinth-s.github.io/Audit",
-=======
-  "home": "/http://Arvinth-s.github.io/Audit",
->>>>>>> client-programming
   "name": "audit",
   "version": "0.1.0",
   "private": true,
