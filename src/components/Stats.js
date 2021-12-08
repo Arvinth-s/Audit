@@ -63,7 +63,6 @@ const Stats = () => {
       if (!intervals || intervals.length === 0) {
         return null;
       }
-      console.log("intervals", intervals);
       let sum = 0;
       intervals.map((interval) => {
         const date1 = moment(interval.pauseTime, "DD-MM-YYYY HH:mm:ss"),
@@ -99,20 +98,9 @@ const Stats = () => {
     for (let i = 10; i < 24; i++) {
       targetIntervals.push(i + ":00:00");
     }
-    console.log("target intervals", targetIntervals);
     var testIntervals = [];
     for (let i = 0; intervals.length > 0 && i < 23; i++) {
       let temp_intervals = intervals.filter((value) => {
-        console.log(
-          "startTime H",
-          moment(value.startTime, "DD-MM-YYYY HH:mm:ss").hour(),
-          "targetInterval H",
-          moment(targetIntervals[i + 1], "HH:mm:ss").hour(),
-          "startTime",
-          moment(value.startTime, "DD-MM-YYYY HH:mm:ss").hour(),
-          "targetInterval",
-          moment(targetIntervals[i], "HH:mm:ss").hour()
-        );
         return (
           moment(value.startTime, "DD-MM-YYYY HH:mm:ss").hour() <
             moment(targetIntervals[i + 1], "HH:mm:ss").hour() &&
@@ -135,17 +123,13 @@ const Stats = () => {
           60 * moment(interval.startTime, "DD-MM-YYYY HH:mm:ss").minute() +
           moment(interval.startTime, "DD-MM-YYYY HH:mm:ss").seconds();
         var ts = a - b;
-        console.log("a", a, "b", b);
         temp_sum += Math.log10(1 + ts);
 
-        // console.log("moments", a, b, "tempsum", temp_sum, "ts", ts, i);
         return 0;
       });
       testIntervals.push(temp_sum);
-      console.log("temp intervals", temp_intervals);
     }
 
-    console.log("testIntervals", testIntervals);
     plotGraph({
       labels: targetIntervals,
       data: testIntervals,
